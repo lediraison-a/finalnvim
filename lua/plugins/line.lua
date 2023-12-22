@@ -34,28 +34,65 @@ return {
         },
     },
 
+    { "arkav/lualine-lsp-progress" },
+
     {
         "nvim-lualine/lualine.nvim",
-        event = "VeryLazy",
-        lazy = false,
-        opts = function()
+        -- event = "VeryLazy",
+        deppendencies = {
+            "kyazdani42/nvim-web-devicons",
+            "f-person/git-blame.nvim",
+            "ray-x/lsp_signature.nvim",
+            "arkav/lualine-lsp-progress"
+        },
+        -- lazy = false,
+        config = function()
             local git_blame = require('gitblame')
-            return {
+
+            local signatureTextWidth = 100
+            local current_signature = function()
+                if not pcall(require, 'lsp_signature') then return end
+                local sig = require("lsp_signature").status_line(signatureTextWidth)
+                return sig.label
+            end
+
+            require('lualine').setup({
                 options = {
                     icons_enabled = true,
                     section_separators = { left = "", right = "" },
                     component_separators = { left = "•", right = "•" },
                 },
                 sections = {
+
                     lualine_c = {
-                        { 'filename' },
-                        { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available }
+                        {
+                            'filename',
+                            separator = "|",
+                        },
+                        {
+                            current_signature,
+                            separator = "|",
+                        },
+                        {
+                            git_blame.get_current_blame_text,
+                            separator = "|",
+                            cond = git_blame.is_blame_text_available,
+                        },
+                    },
+                    lualine_x = {
+                        {
+                            'lsp_progress',
+                            display_components = { 'lsp_client_name', 'spinner', { 'title', 'percentage', 'message' } },
+                            timer = { progress_enddelay = 500, spinner = 1000, lsp_client_name_enddelay = 1000 },
+                            spinner_symbols = { '🌑 ', '🌒 ', '🌓 ', '🌔 ', '🌕 ', '🌖 ', '🌗 ', '🌘 ' },
+                        }
                     }
+
                 },
                 -- tabline = {
                 -- 	lualine_a = {'buffers'},
                 -- }
-            }
+            })
         end,
     },
 }

@@ -222,16 +222,41 @@ return {
     -- LSP signature
     {
         "ray-x/lsp_signature.nvim",
-        event = "VeryLazy",
-        opts = {
-            hint_enable = true, -- virtual hint enable
-            hint_prefix = ">",
-            handler_opts = {
-                border = "none" -- double, rounded, single, shadow, none, or a table of borders
-            },
-            padding = ' '
+        keys = {
+            { "<C-S>", "<cmd>lua require'lsp_signature'.toggle_float_win()<cr>", mode = "i", desc = "Toggle signature" },
+            { "<C-S>", "<cmd>lua require'lsp_signature'.toggle_float_win()<cr>", mode = "n", desc = "Toggle signature" },
         },
-        config = function(_, opts) require 'lsp_signature'.setup(opts) end
+        lazy = false,
+        config = function()
+            local lsp_signature = require('lsp_signature')
+
+            vim.api.nvim_create_autocmd({ "CursorHold", "CursorMoved", "CursorMovedI" }, {
+                pattern = "*",
+                callback = function(ev)
+                    -- if lsp client not ready, don't do anything
+                    if next(require('lspconfig').util.available_servers()) == nil then
+                        return
+                    end
+                    lsp_signature.signature()
+                    lsp_signature.on_UpdateSignature()
+                    lsp_signature.check_signature_should_close()
+                end
+            })
+
+
+
+            lsp_signature.setup({
+                hint_enable = false, -- virtual hint enable
+                hint_prefix = ">",
+                handler_opts = {
+                    border = "none" -- double, rounded, single, shadow, none, or a table of borders
+                },
+                padding = ' ',
+                -- always_trigger = true,              -- sometime show signature on new line or in middle of parameter can be confusing, set it to false for #58
+                -- auto_close_after = nil,             -- autoclose signature float win after x sec, disabled if nil.
+                -- extra_trigger_chars = { "(", "," }, -- Array of extra characters that will trigger signature completion, e.g., {"(", ","}
+            })
+        end
     },
 
     -- project

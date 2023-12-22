@@ -24,5 +24,6 @@ o.expandtab = true
 vim.opt.list = true
 vim.opt.listchars:append "space:⋅"
 
-vim.api.nvim_set_keymap('n', '<Leader>et', '<cmd>below split | resize 18% | term<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>te', '<cmd>below split | resize 18% | term<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>tv', '<cmd>rightbelow vsplit | term<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', { noremap = true, silent = true })
