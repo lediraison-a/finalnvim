@@ -2,7 +2,7 @@ return {
     {
         'nvim-telescope/telescope.nvim',
         tag = '0.1.2', -- or branch = '0.1.x',
-        lazy = false,
+        -- lazy = false,
         dependencies = {
             "nvim-lua/plenary.nvim",
             "debugloop/telescope-undo.nvim",
@@ -43,7 +43,9 @@ return {
             --     desc =
             --     "Registers"
             -- },
+
         },
+
         config = function()
             local telescope = require("telescope")
             telescope.load_extension("undo")
@@ -83,5 +85,5 @@ return {
 
             require("telescope-tabs").setup({})
         end
-    },
+    }
 }
