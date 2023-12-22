@@ -1,13 +1,18 @@
 return {
     ------------------------ LSP
     {
+        "folke/neodev.nvim",
+        opts = {},
+        lazy = false,
+    },
+
+    {
         'VonHeikemen/lsp-zero.nvim',
         branch = 'v2.x',
         lazy = true,
         config = function()
             -- This is where you modify the settings for lsp-zero
             -- Note: autocompletion settings will not take effect
-
             require('lsp-zero.settings').preset({})
         end
     },
@@ -21,6 +26,7 @@ return {
             { 'hrsh7th/cmp-nvim-lsp' },
             { 'williamboman/mason-lspconfig.nvim' },
             { 'williamboman/mason.nvim' },
+            'folke/neodev.nvim'
         },
         keys = {
             { "<leader>cgD", "<cmd>lua vim.lsp.buf.declaration()<cr>",          "code goto declarations" },
@@ -42,6 +48,15 @@ return {
                 lsp.buffer_autoformat()
             end)
             lsp.setup()
+            require('lspconfig').lua_ls.setup {
+                settings = {
+                    Lua = {
+                        workspace = {
+                            checkThirdParty = false,
+                        },
+                    },
+                },
+            }
         end
     },
 
@@ -67,26 +82,6 @@ return {
                 },
                 handlers = {
                     lsp_zero.default_setup,
-                    -- arduino_language_server = function()
-                    --     local MY_FQBN = "arduino:avr:leonardo"
-                    --     lsp_config.arduino_language_server.setup({
-                    --         filetypes = { "cpp", "arduino" },
-                    --         cmd = {
-                    --             "arduino-language-server",
-                    --             "-cli-config", "/home/alban/.arduino15/arduino-cli.yaml",
-                    --             "-fqbn",
-                    --             MY_FQBN,
-                    --             "-cli", "/home/alban/.local/bin/arduino-cli.exe"
-                    --         }
-                    --     })
-                    -- end,
-                    clangd = function()
-                        lsp_config.clangd.setup({
-                            cmd = {
-                                "clangd",
-                            }
-                        })
-                    end
                 }
             }
         end
@@ -120,6 +115,7 @@ return {
             })
         end
     },
+    -- To enable copilot completion, uncomment the following lines
     -- {
     --     "zbirenbaum/copilot-cmp",
     --     config = function()
@@ -145,6 +141,8 @@ return {
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-path",
             "saadparwaiz1/cmp_luasnip",
+            { dir = "/home/alban/workspace/cmp_registers", as = "cmp_registers" },
+            -- To enable copilot completion, uncomment the following lines
             -- "zbirenbaum/copilot-cmp",
         },
         opts = function()
@@ -154,14 +152,6 @@ return {
             local copilot_suggetion = require('copilot.suggestion')
             local cmp_format = require('lsp-zero').cmp_format()
             require('lsp-zero.cmp').extend()
-
-            cmp.event:on("menu_opened", function()
-                vim.b.copilot_suggestion_hidden = true
-            end)
-
-            cmp.event:on("menu_closed", function()
-                vim.b.copilot_suggestion_hidden = false
-            end)
 
             local getSuperTabCopilot = function(select_opts)
                 return cmp.mapping(function(fallback)
@@ -192,6 +182,7 @@ return {
                     { name = "luasnip" },
                     { name = "buffer" },
                     { name = "path" },
+                    { name = "registers" }
                 }),
                 mapping = cmp.mapping.preset.insert({
                     ["<C-Space>"] = cmp.mapping.complete(),
@@ -200,15 +191,16 @@ return {
                     ["<Tab>"] = getSuperTabCopilot(),
                     ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
                 }),
-                -- preselect = 'item',
                 formatting = cmp_format,
-                -- completion = {
-                --     completeopt = 'menu,menuone,noinsert'
-                -- },
-                -- window = {
-                -- 	completion = cmp.config.window.bordered(),
-                -- 	documentation = cmp.config.window.bordered(),
-                -- }
+                completion = {
+                    autocomplete = false,
+                    --     completeopt = 'menu,menuone,noinsert'
+                },
+                window = {
+                    -- completion = cmp.config.window.bordered(),
+                    -- documentation = cmp.config.window.bordered(),
+                }
+                -- preselect = 'item',
             }
             return options
         end,

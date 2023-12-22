@@ -49,24 +49,6 @@ return {
     {
         "kylechui/nvim-surround",
         opts = {
-
         }
     },
-
-
-    --------------------- Registers
-
-    -- {
-    --     "tenxsoydev/karen-yank.nvim",
-    --     config = true,
-    --     -- lazy = false,
-    --     opts = {
-    --         mappings = {
-    --             disable = { "s", "S", "d", "D", "c", "C" }
-    --         }
-    --     }
-    --
-    -- },
-
-
 }

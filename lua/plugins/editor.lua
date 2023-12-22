@@ -1,210 +1,43 @@
 return {
-    {
-        'projekt0n/github-nvim-theme',
-        lazy = false,    -- make sure we load this during startup if it is your main colorscheme
-        priority = 1000, -- make sure to load this before all the other start plugins
-        config = function()
-            local options = {
-                styles = {
-                    comments = 'italic',
-                    functions = 'italic,bold',
-                },
-                darken = { -- Darken floating windows and sidebar-like windows
-                    floats = true,
-                },
-            }
+    -- {
+    --     dir = "/home/alban/workspace/myregisters",
+    --     opts = {
+    --         border = 'none',
+    --         registers = { "*" }
+    --     }
+    --     -- config = function()
+    --     --     require("myregisters").setup({
+    --     --         border = 'none'
+    --     --     })
+    --     -- end
+    -- },
 
+    -- {
+    --     dir = "/home/alban/workspace/registers.nvim",
+    --     -- "tversteeg/registers.nvim",
+    --     lazy = false,
+    --     keys = {
+    --         { "\"",    mode = { "n", "v" } },
+    --         { "<C-R>", mode = "i" }
+    --     },
+    --     config = function()
+    --         local registers = require("registers")
+    --         registers.setup({
+    --             window = {
+    --                 transparency = 0,
+    --             },
+    --             bind_keys = {
+    --                 ["<Tab>"] = registers.move_cursor_down(),
+    --                 ["<S-Tab>"] = registers.move_cursor_up(),
+    --                 ["<Space>"] = registers.apply_register(),
+    --             },
+    --             -- trim_whitespace = true,
+    --             -- hide_only_whitespace = true,
+    --         })
+    --     end,
+    -- },
 
-            local spec = require('github-theme.spec').load('github_dark_tritanopia')
-            spec['syntax']['builtin0'] = '#00FF7F'
-            spec['syntax']['builtin1'] = 'pink'
-            spec['syntax']['builtin2'] = 'yellow'
-            spec['syntax']['number'] = 'yellow'
-            spec['syntax']['conditional'] = '#00FF7F'
-            spec['syntax']['field'] = '#FF7F50'
-            spec['syntax']['variable'] = 'pink'
-            spec['syntax']['type'] = '#FF7F50'
-            spec['syntax']['statement'] = 'yellow'
-            spec['syntax']['const'] = 'pink'
-            spec['syntax']['ident'] = 'blue'
-            -- spec['syntax']['bracket'] = 'cyan'
-            -- spec['syntax']['func'] = 'magenta'
-            -- spec['syntax']['string'] = 'cyan'
-            local specs =
-                require('github-theme').setup({
-                    options = options,
-                    specs = {
-                        github_dark = spec
-                    },
-                })
-            vim.cmd('colorscheme github_dark')
-        end,
-
-    },
-
-    {
-        'akinsho/bufferline.nvim',
-        dependencies = 'nvim-tree/nvim-web-devicons',
-        lazy = false,
-        keys = {
-            { "<leader>bse", "<cmd>BufferLineSortByExtension<cr>",         desc = "BufferLine Sort By Extenion" },
-            { "<leader>bsd", "<cmd>BufferLineSortByRelativeDirectory<cr>", desc = "BufferLine Sort By RelativeDirectory" },
-            { "<leader>bco", "<cmd>BufferLineCloseOthers<cr>",             desc = "BufferLine Close Others" },
-            { "<leader>bcr", "<cmd>BufferLineCloseRight<cr>",              desc = "BufferLine Close Right" },
-            { "<leader>bcl", "<cmd>BufferLineCloseLeft<cr>",               desc = "BufferLine Close Left" },
-            { "<leader>bP",  "<cmd>BufferLineTogglePin<cr>",               desc = "BufferLine Toggle Pin" },
-            { "<leader>bp",  "<cmd>BufferLinePick<cr>",                    desc = "BufferLine Pick" },
-            { "<C-l>",       "<cmd>BufferLineCycleNext<cr>",               desc = "BufferLine Next" },
-            { "<C-h>",       "<cmd>BufferLineCyclePrev<cr>",               desc = "BufferLine Prev" },
-            { "<C-j>",       "<cmd>BufferLineMoveNext<cr>",                desc = "BufferLine Move Next" },
-            { "<C-k>",       "<cmd>BufferLineMovePrev<cr>",                desc = "BufferLine Move Prev" },
-        },
-        opts = {
-            options = {
-                mode = "buffers",
-                enforce_regular_tabs = true,
-                show_close_icon = false,
-                show_buffer_close_icons = false,
-                show_buffer_icons = true,
-                always_show_bufferline = false,
-                offsets = { {
-                    filetype = "NvimTree",
-                    separator = true,
-                    text = "🌊 NEOVIM",
-                    text_align = "left" --[[| "center" | "right",]]
-                } },
-            },
-        },
-    },
-
-    {
-        "nvim-lualine/lualine.nvim",
-        event = "VeryLazy",
-        lazy = false,
-        opts = function()
-            local git_blame = require('gitblame')
-            return {
-                options = {
-                    icons_enabled = true,
-                    section_separators = { left = "", right = "" },
-                    component_separators = { left = "•", right = "•" },
-                },
-                sections = {
-                    lualine_c = {
-                        { 'filename' },
-                        { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available }
-                    }
-                },
-                -- tabline = {
-                -- 	lualine_a = {'buffers'},
-                -- }
-            }
-        end,
-    },
-
-    {
-        'nvim-telescope/telescope.nvim',
-        tag = '0.1.2', -- or branch = '0.1.x',
-        lazy = false,
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "debugloop/telescope-undo.nvim",
-            "xiyaowong/telescope-emoji.nvim",
-            "LukasPietzschmann/telescope-tabs"
-        },
-        keys = {
-            -- Telescope lsp goto references, implementation, declaration
-            { "<leader>ctr", "<cmd>Telescope lsp_references<cr>",           desc = "LSP References" },
-            { "<leader>cti", "<cmd>Telescope lsp_implementations<cr>",      desc = "LSP Implementations" },
-            { "<leader>ctd", "<cmd>Telescope lsp_definitions<cr>",          desc = "LSP Definitions" },
-            { "<leader>ctD", "<cmd>Telescope lsp_type_definitions<cr>",     desc = "LSP Type Definitions" },
-            -- Telescope diagnostics
-            { "<leader>fd",  "<cmd>Telescope diagnostics bufnr=0<cr>",      desc = "Document diagnostics" },
-            { "<leader>fD",  "<cmd>Telescope diagnostics<cr>",              desc = "Workspace diagnostics" },
-            -- Telescope files
-            { "<leader>fo",  "<cmd>Telescope oldfiles<cr>",                 desc = "Recent" },
-            { "<leader>ff",  "<cmd>Telescope find_files<cr>",               desc = "Find Files (root dir)" },
-            -- Lsp symbols
-            { "<leader>fs",  "<cmd>Telescope lsp_document_symbols<cr>",     desc = "Document Symbols" },
-            { "<leader>fS",  "<cmd>Telescope lsp_workspace_symbols<cr>",    desc = "Workspace Symbols" },
-            -- Tabs & buffers
-            { '<leader>fb',  "<cmd>Telescope buffers<cr>",                  desc = "Buffers" },
-            { "<leader>ft",  "<cmd>Telescope telescope-tabs list_tabs<cr>", desc = "Tabs" },
-            --
-            { "<leader>fc",  "<cmd>Telescope command_history<cr>",          desc = "Command History" },
-            { "<leader>fg",  "<cmd>Telescope live_grep<cr>",                desc = "Live Grep" },
-            { "<leader>fe",  "<cmd>Telescope emoji<cr>",                    desc = "Emoji" },
-            { "<leader>fu",  "<cmd>Telescope undo<cr>",                     desc = "Undo" },
-            { "<leader>fk",  "<cmd>Telescope keymaps<cr>",                  desc = "Key Maps" },
-            { '<leader>fr',  "<cmd>Telescope registers<cr>",                desc = "Registers" },
-            -- {
-            --     '<C-R>',
-            --     "<cmd>Telescope registers<cr>",
-            --     mode = "i",
-            --     desc =
-            --     "Registers"
-            -- },
-        },
-        config = function()
-            local telescope = require("telescope")
-            telescope.load_extension("undo")
-            telescope.load_extension("emoji")
-
-            local pushToRegister = function(prompt_bufnr)
-                local entry = require("telescope.actions.state").get_selected_entry()
-                require("telescope.actions").select_default(prompt_bufnr)
-                vim.fn.setreg('+', vim.fn.getreg(entry.value))
-                vim.fn.setreg('*', vim.fn.getreg(entry.value))
-            end
-
-            local previewers = require('telescope.previewers')
-
-            -- add previewer to registers picker
-            telescope.setup({
-                pickers = {
-                    registers = {
-                        preview = true,
-                        mappings = {
-                            i = {
-                                ["<CR>"] = pushToRegister,
-                            },
-                            n = {
-                                ["<CR>"] = pushToRegister,
-                            }
-                        }
-                    }
-                }
-            })
-
-            require("telescope-tabs").setup({})
-        end
-    },
-
-    {
-        dir = "/home/alban/workspace/registers.nvim",
-        -- "tversteeg/registers.nvim",
-        lazy = false,
-        keys = {
-            { "\"",    mode = { "n", "v" } },
-            { "<C-R>", mode = "i" }
-        },
-        config = function()
-            local registers = require("registers")
-            registers.setup({
-                window = {
-                    transparency = 0,
-                },
-                bind_keys = {
-                    ["<Tab>"] = registers.move_cursor_down(),
-                    ["<S-Tab>"] = registers.move_cursor_up(),
-                    ["<Space>"] = registers.apply_register(),
-                },
-                -- trim_whitespace = true,
-                -- hide_only_whitespace = true,
-            })
-        end,
-    },
-
+    -- indent-blankline
     {
         "lukas-reineke/indent-blankline.nvim",
         main = "ibl",
@@ -234,20 +67,8 @@ return {
             return { indent = { highlight = highlight } }
         end
     },
-    {
-        "lewis6991/gitsigns.nvim",
-        event = { "BufReadPre", "BufNewFile" },
-        opts = {
-            signs = {
-                add = { text = "▎" },
-                change = { text = "▎" },
-                delete = { text = "" },
-                topdelete = { text = "" },
-                changedelete = { text = "▎" },
-                untracked = { text = "▎" },
-            },
-        }
-    },
+
+    -- Git
     {
         "f-person/git-blame.nvim",
         opts = {
@@ -265,6 +86,23 @@ return {
         },
     },
     {
+        "lewis6991/gitsigns.nvim",
+        event = { "BufReadPre", "BufNewFile" },
+        opts = {
+            signs = {
+                add = { text = "▎" },
+                change = { text = "▎" },
+                delete = { text = "" },
+                topdelete = { text = "" },
+                changedelete = { text = "▎" },
+                untracked = { text = "▎" },
+            },
+        }
+    },
+
+
+    -- Color hl
+    {
         "brenoprata10/nvim-highlight-colors",
         opts = {
             render = 'background', -- 'background', 'foreground' or 'first_column'
@@ -272,6 +110,8 @@ return {
             enable_tailwind = false,
         }
     },
+
+    -- NvimTree
     {
         "nvim-tree/nvim-tree.lua",
         dependencies = {
@@ -299,6 +139,7 @@ return {
     },
 
 
+    -- which key & surround support
     {
         "folke/which-key.nvim",
         event = "VeryLazy",
@@ -328,6 +169,7 @@ return {
         end,
     },
 
+    -- rainbow brackets
     {
         'hiphish/rainbow-delimiters.nvim',
         lazy = false,
@@ -371,6 +213,7 @@ return {
         end,
     },
 
+    -- LSP signature
     {
         "ray-x/lsp_signature.nvim",
         event = "VeryLazy",
