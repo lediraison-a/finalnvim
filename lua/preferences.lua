@@ -6,7 +6,7 @@ local go = vim.go
 
 g.mapleader = ' '
 
-vim.o.termguicolors = true
+o.termguicolors = true
 
 o.syntax = "on"
 o.lazyredraw = true
@@ -19,6 +19,12 @@ o.clipboard:append("unnamedplus")
 o.laststatus = 3
 o.expandtab = true
 -- o.listchars = {tab = "••", trail = "•", space = "•", extends = "»", precedes = "«"}
+
+g.loaded_netrw = 1
+g.loaded_netrwPlugin = 1
+
+-- run nvim-tree when a directory is opened
+cmd [[autocmd BufEnter * if (getftype(expand('%')) == 'dir') | NvimTreeToggle | endif]]
 
 
 vim.opt.list = true

@@ -114,6 +114,7 @@ return {
     -- NvimTree
     {
         "nvim-tree/nvim-tree.lua",
+        lazy = false,
         dependencies = {
             "nvim-tree/nvim-web-devicons"
         },
@@ -124,6 +125,7 @@ return {
             sort_by = "case_sensitive",
             view = {
                 width = 30,
+                cursorline = true,
             },
             renderer = {
                 group_empty = true,
@@ -133,10 +135,11 @@ return {
                 },
             },
             filters = {
-                dotfiles = true,
+                dotfiles = false,
+                git_ignored = false,
             },
             sync_root_with_cwd = true,
-            respect_buf_cwd = true,
+            respect_buf_cwd = false,
             update_focused_file = {
                 enable = true,
                 update_root = true
