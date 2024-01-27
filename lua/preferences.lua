@@ -18,6 +18,7 @@ o.tabstop = 4
 o.clipboard:append("unnamedplus")
 o.laststatus = 3
 o.expandtab = true
+o.fillchars = { eob = ' ' }
 -- o.listchars = {tab = "••", trail = "•", space = "•", extends = "»", precedes = "«"}
 
 g.loaded_netrw = 1
