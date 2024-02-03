@@ -85,5 +85,24 @@ return {
 
             require("telescope-tabs").setup({})
         end
+    },
+
+    -- project
+    {
+        "ahmedkhalf/project.nvim",
+        lazy = false,
+        dependencies = {
+            "nvim-telescope/telescope.nvim",
+        },
+        keys = {
+            { "<leader>fp", "<cmd>Telescope projects<cr>", desc = "Projects" },
+        },
+        config = function()
+            require('telescope').load_extension('projects')
+            require("project_nvim").setup {
+                silent_chdir = false,
+                detection_methods = { "pattern", "lsp", "git" },
+            }
+        end
     }
 }
