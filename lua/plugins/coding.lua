@@ -51,4 +51,10 @@ return {
         opts = {
         }
     },
+
+    --------------------------
+    {
+        "Fymyte/rasi.vim",
+        ft = "rasi",
+    }
 }

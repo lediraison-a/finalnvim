@@ -64,7 +64,21 @@ return {
                 vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
                 vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
             end)
-            return { indent = { highlight = highlight } }
+
+            hooks.register(
+                hooks.type.WHITESPACE,
+                hooks.builtin.hide_first_tab_indent_level
+            )
+
+            return {
+                indent = {
+                    highlight = highlight,
+                    tab_char = "▎",
+                },
+                scope = {
+                    enabled = false,
+                }
+            }
         end
     },
 
