@@ -69,6 +69,7 @@ return {
         config = function()
             require("mason").setup()
         end,
+        priority = 55,
         -- build = ":MasonUpdate",
         -- cmd = "Mason",
     },
@@ -79,6 +80,10 @@ return {
             local lsp_config = require("lspconfig")
             return {
                 ensure_installed = {
+                    "jsonls",
+                    "tsserver",
+                    "clangd",
+                    "bashls",
                 },
                 handlers = {
                     lsp_zero.default_setup,

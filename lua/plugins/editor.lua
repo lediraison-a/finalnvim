@@ -149,8 +149,8 @@ return {
                 },
             },
             filters = {
-                dotfiles = false,
-                git_ignored = false,
+                dotfiles = true,
+                git_ignored = true,
             },
             sync_root_with_cwd = true,
             respect_buf_cwd = false,
