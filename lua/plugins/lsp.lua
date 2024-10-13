@@ -124,23 +124,19 @@ return {
           -- Navigate between completion items
           ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = 'select' }),
           ['<C-n>'] = cmp.mapping.select_next_item({ behavior = 'select' }),
-
           -- Ctrl+Space to trigger completion menu
           ['<C-Space>'] = cmp.mapping.complete(),
-
           -- Navigate between snippet placeholder
           ['<C-f>'] = cmp_action.vim_snippet_jump_forward(),
           ['<C-b>'] = cmp_action.vim_snippet_jump_backward(),
-
           -- Scroll up and down in the completion documentation
           ['<C-u>'] = cmp.mapping.scroll_docs(-4),
           ['<C-d>'] = cmp.mapping.scroll_docs(4),
-
           -- Supertab
           ['<CR>'] = cr_mapping,
           ['<Tab>'] = tab_mapping,
           ['<S-Tab>'] = stab_mapping,
-
+          --
           ['<Esc>'] = cmp.mapping.abort()
         }),
         snippet = {
@@ -161,7 +157,6 @@ return {
       { 'hrsh7th/cmp-nvim-lsp' },
       { 'williamboman/mason.nvim' },
       { 'williamboman/mason-lspconfig.nvim' },
-      { 'SmiteshP/nvim-navic' },
     },
     keys = {
       { '<leader>cr',  '<cmd>lua vim.lsp.buf.rename()<cr>',               'code rename' },
@@ -179,10 +174,6 @@ return {
       local lsp_attach = function(client, bufnr)
         local opts = { buffer = bufnr }
         lsp_zero.buffer_autoformat()
-
-        if client.server_capabilities['documentSymbolProvider'] then
-          require('nvim-navic').attach(client, bufnr)
-        end
       end
 
       lsp_zero.extend_lspconfig({
@@ -205,5 +196,21 @@ return {
         }
       })
     end
+  },
+  -- lsp saga
+  {
+    'nvimdev/lspsaga.nvim',
+    lazy = true,
+    event = { 'LspAttach' },
+    config = function()
+      require('lspsaga').setup({
+        symbol_in_winbar = {
+          enable = true,
+          color_mode = false,
+        },
+        border = 'none'
+      })
+    end,
   }
+
 }

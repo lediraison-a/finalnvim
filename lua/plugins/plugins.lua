@@ -261,16 +261,6 @@ return {
     opts = {}
   },
   {
-    'utilyre/barbecue.nvim',
-    name = 'barbecue',
-    dependencies = { 'SmiteshP/nvim-navic' },
-    version = '*',
-    event = { 'BufReadPost', 'BufNewFile' },
-    opts = {
-      attach_navic = false,
-    },
-  },
-  {
     'j-hui/fidget.nvim',
     opts = {},
   },
