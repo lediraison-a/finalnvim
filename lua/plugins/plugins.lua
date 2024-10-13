@@ -237,19 +237,23 @@ return {
     end,
   },
   {
-    'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
+    'windwp/nvim-autopairs',
+    lazy = true,
+    event = 'InsertEnter',
+    opts = {
+      check_ts = true,
+      enable_check_bracket_line = false,
+    }
+  },
+  {
+    'windwp/nvim-ts-autotag',
+    lazy = true,
     event = { 'BufReadPost', 'BufNewFile' },
-  },
-  {
-    'folke/lazydev.nvim',
-    ft = 'lua', -- only load on lua files
-    opts = {},
-  },
-  {
-    'echasnovski/mini.pairs',
-    event = 'VeryLazy',
-    opts = {},
+    opts = {
+      opts = {
+        enable_close_on_slash = false
+      }
+    }
   },
   {
     'numToStr/Comment.nvim',

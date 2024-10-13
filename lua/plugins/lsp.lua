@@ -10,6 +10,16 @@ return {
     lazy = false,
     config = true,
   },
+  {
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+    event = { 'BufReadPost', 'BufNewFile' },
+  },
+  {
+    'folke/lazydev.nvim',
+    ft = 'lua', -- only load on lua files
+    opts = {},
+  },
   -- Autocompletion
   {
     'onsails/lspkind.nvim',
@@ -49,6 +59,12 @@ return {
       local cmp = require('cmp')
       local cmp_action = require('lsp-zero').cmp_action()
       local luasnip = require('luasnip')
+
+      local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+      cmp.event:on(
+        'confirm_done',
+        cmp_autopairs.on_confirm_done()
+      )
 
       -- custom formating, nvim-highlight-colors & lspkind compatible
       local cmp_formating = cmp.get_config().formatting
