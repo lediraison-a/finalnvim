@@ -152,10 +152,17 @@ return {
   },
   {
     'NeogitOrg/neogit',
-    lazy = false,
-    cmd = 'Neogit',
+    lazy = true,
+    cmd = { 'Neogit' },
     keys = {
-      { '<leader>g', '<cmd>Neogit<cr>', desc = 'Key Maps' },
+      { '<leader>gg', '<cmd>Neogit<cr>',        desc = 'Neogit' },
+      { '<leader>gf', '<cmd>Neogit fetch<cr>',  desc = 'Neogit fetch' },
+      { '<leader>gc', '<cmd>Neogit commit<cr>', desc = 'Neogit commit' },
+      { '<leader>gd', '<cmd>Neogit commit<cr>', desc = 'Neogit diff' },
+      { '<leader>gr', '<cmd>Neogit rebase<cr>', desc = 'Neogit rebase' },
+      { '<leader>gm', '<cmd>Neogit merge<cr>',  desc = 'Neogit merge' },
+      { '<leader>gl', '<cmd>NeogitLog<cr>',     desc = 'Neogit log' },
+      { '<leader>gb', '<cmd>Neogit branch<cr>', desc = 'Neogit branch' },
     },
     dependencies = {
       'sindrets/diffview.nvim',
@@ -163,7 +170,17 @@ return {
     },
     opts = {
       kind = 'vsplit',
-      auto_show_console = true,
+      commit_editor = {
+        kind = 'vsplit',
+      },
+      telescope_sorter = function()
+        return require("telescope").extensions.fzf.native_fzf_sorter()
+      end,
+      signs = {
+        hunk = { "", "" },
+        item = { "󰜴", "󰜮" },
+        section = { "󰜵", "󰜯" },
+      },
     }
   },
   ----
