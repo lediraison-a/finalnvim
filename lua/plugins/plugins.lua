@@ -163,6 +163,8 @@ return {
       { '<leader>gm', '<cmd>Neogit merge<cr>',  desc = 'Neogit merge' },
       { '<leader>gl', '<cmd>NeogitLog<cr>',     desc = 'Neogit log' },
       { '<leader>gb', '<cmd>Neogit branch<cr>', desc = 'Neogit branch' },
+      { '<leader>gP', '<cmd>Neogit push<cr>',   desc = 'Neogit Push' },
+      { '<leader>gp', '<cmd>Neogit pull<cr>',   desc = 'Neogit pull' },
     },
     dependencies = {
       'sindrets/diffview.nvim',
