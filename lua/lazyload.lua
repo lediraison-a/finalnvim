@@ -46,6 +46,7 @@ vim.keymap.set('i', '<S-Tab>', '<C-d>')
 require('lazy').setup({
   spec = {
     -- other plugins
+    { import = 'lsp' },
     { import = 'plugins' },
   },
   change_detection = {
