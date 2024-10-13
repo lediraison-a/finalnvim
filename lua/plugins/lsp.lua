@@ -5,13 +5,11 @@ return {
     lazy = true,
     config = false,
   },
-
   {
     'williamboman/mason.nvim',
     lazy = false,
     config = true,
   },
-
   -- Autocompletion
   {
     'onsails/lspkind.nvim',
@@ -39,15 +37,20 @@ return {
     end,
   },
   {
-    'hrsh7th/nvim-cmp',
-    event = 'InsertEnter',
+    'iguanacucumber/magazine.nvim',
+    name = 'nvim-cmp',
+    event = { 'InsertEnter', 'CmdlineEnter' },
     dependencies = {
-      { 'saadparwaiz1/cmp_luasnip' }
+      { 'saadparwaiz1/cmp_luasnip' },
+      { 'hrsh7th/cmp-buffer' },
+      { 'hrsh7th/cmp-path' },
     },
     config = function()
       local cmp = require('cmp')
       local cmp_action = require('lsp-zero').cmp_action()
+      local luasnip = require('luasnip')
 
+      -- custom formating, nvim-highlight-colors & lspkind compatible
       local cmp_formating = cmp.get_config().formatting
       cmp_formating.format = function(entry, item)
         local color_item = require('nvim-highlight-colors').format(entry, { kind = item.kind })
@@ -59,20 +62,52 @@ return {
         return item
       end
 
+      -- Supertab mappings
+      local tab_mapping = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+        elseif luasnip.locally_jumpable(1) then
+          luasnip.jump(1)
+        else
+          fallback()
+        end
+      end, { 'i', 's' })
+      local stab_mapping = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item()
+        elseif luasnip.locally_jumpable(-1) then
+          luasnip.jump(-1)
+        else
+          fallback()
+        end
+      end, { 'i', 's' })
+      local cr_mapping = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          if luasnip.expandable() then
+            luasnip.expand()
+          else
+            cmp.confirm({
+              select = true,
+            })
+          end
+        else
+          fallback()
+        end
+      end)
+
+      -- cmp setup
       cmp.setup({
-        sources = {
+        sources = cmp.config.sources({
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
+        }, {
           { name = 'buffer' },
           { name = 'path' },
-        },
+        }),
         mapping = cmp.mapping.preset.insert({
           -- Navigate between completion items
           ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = 'select' }),
           ['<C-n>'] = cmp.mapping.select_next_item({ behavior = 'select' }),
-
-          -- `Enter` key to confirm completion
-          ['<CR>'] = cmp.mapping.confirm({ select = false }),
 
           -- Ctrl+Space to trigger completion menu
           ['<C-Space>'] = cmp.mapping.complete(),
@@ -84,17 +119,23 @@ return {
           -- Scroll up and down in the completion documentation
           ['<C-u>'] = cmp.mapping.scroll_docs(-4),
           ['<C-d>'] = cmp.mapping.scroll_docs(4),
+
+          -- Supertab
+          ['<CR>'] = cr_mapping,
+          ['<Tab>'] = tab_mapping,
+          ['<S-Tab>'] = stab_mapping,
+
+          ['<Esc>'] = cmp.mapping.abort()
         }),
         snippet = {
           expand = function(args)
-            vim.snippet.expand(args.body)
+            luasnip.lsp_expand(args.body)
           end,
         },
         formatting = cmp_formating
       })
     end
   },
-
   -- LSP
   {
     'neovim/nvim-lspconfig',
@@ -104,6 +145,7 @@ return {
       { 'hrsh7th/cmp-nvim-lsp' },
       { 'williamboman/mason.nvim' },
       { 'williamboman/mason-lspconfig.nvim' },
+      { 'SmiteshP/nvim-navic' },
     },
     keys = {
       { '<leader>cr',  '<cmd>lua vim.lsp.buf.rename()<cr>',               'code rename' },
@@ -118,11 +160,13 @@ return {
     config = function()
       local lsp_zero = require('lsp-zero')
 
-      -- lsp_attach is where you enable features that only work
-      -- if there is a language server active in the file
       local lsp_attach = function(client, bufnr)
         local opts = { buffer = bufnr }
         lsp_zero.buffer_autoformat()
+
+        if client.server_capabilities['documentSymbolProvider'] then
+          require('nvim-navic').attach(client, bufnr)
+        end
       end
 
       lsp_zero.extend_lspconfig({

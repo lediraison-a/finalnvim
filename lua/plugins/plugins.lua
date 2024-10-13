@@ -47,13 +47,26 @@ return {
   {
     'nvim-lualine/lualine.nvim',
     lazy = false,
-    opts = {
-      options = {
-        icons_enabled = true,
-        section_separators = { left = '', right = '' },
-        component_separators = { left = '•', right = '•' },
-      },
-    }
+    config = function()
+      local function indend_info()
+        local tabstop = vim.opt.tabstop:get()
+        local shiftwidth = vim.opt.shiftwidth:get()
+        return tabstop .. ',' .. shiftwidth
+      end
+
+      require('lualine').setup({
+        options = {
+          section_separators = { left = '', right = '' },
+          component_separators = { left = '•', right = '•' },
+        },
+        sections = {
+          lualine_c = {
+            { indend_info },
+            { 'filename' },
+          }
+        },
+      })
+    end
   },
   -- bufferline
   {
@@ -81,11 +94,13 @@ return {
         show_buffer_close_icons = false,
         show_buffer_icons = true,
         always_show_bufferline = false,
+        close_command = 'Bdelete! %d',
+        right_mouse_command = 'Bdelete! %d',
         offsets = { {
           filetype = 'NvimTree',
           separator = true,
           text = '🌊 NEOVIM',
-          text_align = 'left' --[[| 'center' | 'right',]]
+          text_align = 'left'
         } },
       }
     },
@@ -99,6 +114,7 @@ return {
     'nvim-telescope/telescope.nvim',
     tag = '0.1.8',
     keys = {
+      -- lsp
       { '<leader>ctr', '<cmd>Telescope lsp_references<cr>',           desc = 'LSP References' },
       { '<leader>cti', '<cmd>Telescope lsp_implementations<cr>',      desc = 'LSP Implementations' },
       { '<leader>ctd', '<cmd>Telescope lsp_definitions<cr>',          desc = 'LSP Definitions' },
@@ -133,6 +149,22 @@ return {
     keys = {
       { '<leader>lg', '<cmd>LazyGit<cr>', desc = 'LazyGit' },
     },
+  },
+  {
+    'NeogitOrg/neogit',
+    lazy = false,
+    cmd = 'Neogit',
+    keys = {
+      { '<leader>g', '<cmd>Neogit<cr>', desc = 'Key Maps' },
+    },
+    dependencies = {
+      'sindrets/diffview.nvim',
+      'nvim-telescope/telescope.nvim',
+    },
+    opts = {
+      kind = 'vsplit',
+      auto_show_console = true,
+    }
   },
   ----
   {
@@ -202,20 +234,37 @@ return {
   },
   {
     'numToStr/Comment.nvim',
+    event = { 'BufReadPost', 'BufNewFile' },
     opts = {}
   },
   {
     'utilyre/barbecue.nvim',
     name = 'barbecue',
-    event = { 'BufReadPost', 'BufNewFile' },
+    dependencies = { 'SmiteshP/nvim-navic' },
     version = '*',
-    dependencies = {
-      'SmiteshP/nvim-navic',
+    event = { 'BufReadPost', 'BufNewFile' },
+    opts = {
+      attach_navic = false,
     },
-    opts = {},
   },
   {
     'j-hui/fidget.nvim',
     opts = {},
+  },
+  {
+    'Darazaki/indent-o-matic',
+    event = { 'BufReadPost', 'BufNewFile' },
+    opts = {},
+  },
+  {
+    'famiu/bufdelete.nvim',
+    lazy = true,
+    keys = {
+      { '<leader>bcc', '<cmd>Bdelete<cr>', desc = 'Close current buffer' },
+    },
+    cmd = {
+      'Bdelete',
+      'Bwipeout',
+    },
   }
 }

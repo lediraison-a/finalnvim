@@ -40,7 +40,7 @@ vim.opt.tabstop = 2
 vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>te', '<cmd>below split | resize 18% | term<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>tv', '<cmd>rightbelow vsplit | term<CR>', { noremap = true, silent = true })
-
+vim.keymap.set('i', '<S-Tab>', '<C-d>')
 
 -- Setup lazy.nvim
 require('lazy').setup({
