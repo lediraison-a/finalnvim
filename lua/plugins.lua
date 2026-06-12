@@ -279,5 +279,5 @@ return {
       'Bdelete',
       'Bwipeout',
     },
-  }
+  },
 }
